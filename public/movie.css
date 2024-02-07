@@ -1,0 +1,48 @@
+.movie-background{
+   background-color: #404040;
+   top: 0;
+   left: 0;
+   width: 100vw; 
+   height: 150vh;
+}
+
+.back-button-link {
+   text-decoration: none;
+   color: white;
+   font-size: 20px;
+}
+
+
+.back-button {
+   background-color: #575757;
+   border: 2px solid white;
+   border-radius: 5px;
+   width: 60px;
+   margin-top: 4%;
+   margin-left: 4%;
+}
+
+.back-button:hover{
+   background-color: black;
+   color: white;
+}
+
+
+.movie-div{
+   position: absolute;
+   margin-top: 25%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   background-color: #575757;
+   border-radius: 5px;
+   border: 2px solid white;
+   color: white;
+   width: 300px;
+   text-align: center;
+}
+
+.movie-poster {
+   margin-top: 4%;
+   border-radius: 5px;
+}
+

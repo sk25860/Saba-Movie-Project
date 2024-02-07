@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <title>saba's movies</title>
+   <link rel="stylesheet" href="/styles.css">
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+
+<body>
+   <div class="container-fluid">
+      <div class="row">
+        <div class="title">
+           <h1><svg class="movie-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M0 1a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm4 0v6h8V1zm8 8H4v6h8zM1 1v2h2V1zm2 3H1v2h2zM1 7v2h2V7zm2 3H1v2h2zm-2 3v2h2v-2zM15 1h-2v2h2zm-2 3v2h2V4zm2 3h-2v2h2zm-2 3v2h2v-2zm2 3h-2v2h2z"/>
+           </svg>
+               Saba's Movies</h1>
+            <form action="/sort" method="post" id="ratingForm"> <!-- COME BACK TO THIS -->
+              <label for="rating">Sort By Rating:</label>
+              <select name="rating" id="rating" onchange="if (this.value !== 'placeholder') document.getElementById('ratingForm').submit()">
+                <option value="placeholder"> </option>
+                <option value="all">all</option>
+                <option value="PG">PG</option>
+                <option value="PG-13">PG-13</option>
+                <option value="R">R</option>
+              </select>
+            </form>
+            
+            <a class="sort-watched-button" href="/sortWatched">Sort by Times Watched</a>
+            
+         </div>
+        
+         <!-- Scrollable column taking up the left third of the screen -->
+         <div class="col-md-4" style="overflow-y: scroll; max-height: 100vh;">  
+              
+            <div class="search-section">
+               <form action="/search" method="post" >
+                  <input class="search-bar" type="text" id="query" name="query" placeholder="search for a movie" required>
+                  <button  class="search-button" type="submit">Search</button>
+               </form>
+
+
+               <% if (movies) { %>
+                  
+                  <div class="title-text-div-two">
+                     <h2 class="search-results-text">Search Results</h2>
+                  </div>
+                  
+                  <% movies.Search.forEach(movie => { %>
+                    <div class="search-movie-container">
+                       <% if (movie.Poster && movie.Poster !== 'N/A') { %>
+                           <img src="<%= movie.Poster %>" alt="<%= movie.Title %> Poster" style="max-width: 200px;" class="search-movie-poster">
+                        <% } %>
+
+                        <h3 class="search-movie-title"><%= movie.Title %></h3>
+                        <p class="search-movie-year"><%= movie.Year %></p>
+
+
+                        <form id="watchedForm" action="/watched" method="post">
+                          <input type="hidden" name="title" value="<%= movie.Title %>">
+                             <button type="submit" class="search-movie-button"><strong>+</strong></button>
+                        </form>
+                    </div>
+               
+                  <% }) %> 
+               <% }%>
+            </div>
+            
+         </div>
+         
+         <div class="col-md-8">
+           <br>
+           <div class="title-text-div">
+              <h3 class="watched-movies-text">Watched Movies:</h3>
+              <p class="aggregations">You've watch <%= totalMovies %> movies a total of <%= totalTimesWatched %> times!</p> 
+           </div>
+           
+           <% if (flashMessages.success) { %>
+                <div class="alert alert-success" role="alert">
+                    <%= flashMessages.success %>
+                </div>
+            <% } %>
+           
+            <div class="movie-grid">
+               <% if (watchedMovies && watchedMovies.length > 0) { %>
+                  <% watchedMovies.forEach(movie => { %>
+                  <div class="movie-container">
+                     <% if (movie.poster && movie.poster !== 'N/A') { %>
+                        <img src="<%= movie.poster %>" alt="<%= movie.title %> Poster" style="max-width: 200px;">
+                     <% } %>
+                     <h3 class="movie-title"><%= movie.title %></h3>
+                     <p><%= movie.rating %></p>
+                     <p>Times Watched: <%= movie.timesWatched %></p>
+                     
+                     <form action="/watch" method="post">
+                      <input type="hidden" name="movieId" value="<%= movie._id %>">
+                      <button type="submit" class="watch-button">Watch</button>
+                    </form>
+
+                     <form action="/delete" method="post">
+                        <input type="hidden" name="movieId" value="<%= movie._id %>">
+                        <button type="submit" class="delete-button" onclick="showConfirmation('<%= movie._id %>')">Delete</button>
+                     </form>
+                     
+                     <a class="details-link" href="/movie/details/<%= movie._id %>">View Details</a>
+
+                  </div>
+                <% }) %>
+              <% } else { %>
+                <p>no watched movies</p>
+              <% } %> 
+            </div>
+           
+         </div>
+         
+         
+      </div>
+   </div>
+   
+</body>
+
+</html>
